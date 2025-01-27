@@ -1,61 +1,3 @@
-# import boto3
-# import json
-# import base64
-# import io
-# from PIL import Image
-# import numpy as np
-
-# bedrock = boto3.client("bedrock-runtime", region_name="us-west-2");
-
-
-# class Image2ImageNode:
-#     @classmethod
-#     def INPUT_TYPES(s):
-#         return {
-#             "required": {"image": ("IMAGE",),
-#                          "prompt": ("STRING", {"default": ""}), 
-#                          "strength": ("FLOAT", {"default": 0.75})}
-#         }
-
-#     RETURN_TYPES = ("IMAGE",)
-#     FUNCTION = "image_to_image"
-#     CATEGORY = "image"
-#     OUTPUT_NODE = True
-
-#     def image_to_image(self, image, prompt, strength):
-#         # Convert the image tensor to a PIL Image
-#         image = Image.fromarray(
-#             np.clip(255.0 * image.cpu().numpy().squeeze(), 0, 255).astype(np.uint8)
-#         )
-
-#         # Convert the image to base64
-#         buffered = io.BytesIO()
-#         image.save(buffered, format="PNG")
-#         img_str = base64.b64encode(buffered.getvalue()).decode()
-#         response = bedrock.invoke_model(
-#             modelId='stability.sd3-large-v1:0',
-#             body=json.dumps({
-#                 'prompt': prompt,
-#                 'image': img_str,
-#                 'strength': strength,
-#                 'mode': 'image-to-image'
-#             })
-#         )
-
-#         # Send the request to the Gemini API
-#         try:
-#             output_body = json.loads(response["body"].read().decode("utf-8"))
-#             base64_output_image = output_body["images"][0]
-#             image_data = base64.b64decode(base64_output_image)
-#             image = Image.open(io.BytesIO(image_data))
-#             image.save("output_image.png")
-#         except Exception as e:
-#             image = f"Error: Unable to generate image. {str(e)}"
-
-#         return (image,)
-
-
-# NODE_CLASS_MAPPINGS = {"Image2ImageNode": Image2ImageNode}
 import boto3
 import json
 import base64
@@ -116,8 +58,7 @@ class Image2ImageNode:
         try:
             # Process response and convert to tensor
             output_body = json.loads(response["body"].read().decode("utf-8"))
-            base64_output_image = output_body["images"][0]
-            image_data = base64.b64decode(base64_output_image)
+            image_data = base64.b64decode(output_body["images"][0])
             output_image = Image.open(io.BytesIO(image_data))
             output_image.save("output_image.png")
             # Convert to numpy array with correct shape for save_images
