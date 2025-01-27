@@ -28,9 +28,10 @@ In the provided example, the node takes the input image from the default ComfyUI
 
 ## Usage
 
-1. Launch ComfyUI
-2. Find the "Image2ImageNode" in the node browser under the "image" category
-3. Connect the node to your workflow with:
+1. Add the Bedrock Node folder to the custom_nodes directory
+2. Launch ComfyUI
+3. Find the "Image2ImageNode" in the node browser under the "image" category
+4. Connect the node to your workflow with:
    - Input image
    - Text prompt
    - Strength value (0-1)
