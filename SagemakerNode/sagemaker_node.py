@@ -7,28 +7,61 @@ import numpy as np
 import torch
 
 runtime = boto3.client('runtime.sagemaker')
+ENDPOINT = "YOUR_ENDPOINT_NAME"
 
 class Text2ImageNode:
     @classmethod
     def INPUT_TYPES(s):
         return {
-            "required": {"prompt": ("STRING", {"default": ""}), 
-                         "strength": ("FLOAT", {"default": 0.75})}
+            "required": {
+                "prompt": ("STRING", {"multiline": True, "default": "a beautiful landscape"})
+            },
+            "optional": {
+                "negative_prompt": ("STRING", {"multiline": True, "default": ""}),
+                "guidance_scale": ("FLOAT", {"default": 3.5, "min": 0.0, "max": 20.0, "step": 0.1}),
+                "height": ("INT", {"default": 768, "min": 384, "max": 1536, "step": 64}),
+                "width": ("INT", {"default": 1360, "min": 384, "max": 2048, "step": 64}),
+                "num_inference_steps": ("INT", {"default": 3, "min": 1, "max": 50, "step": 1}),
+                "seed": ("INT", {"default": -1})
+            }
         }
 
     RETURN_TYPES = ("IMAGE",)
-    FUNCTION = "image_to_image"
+    FUNCTION = "text_to_image"
     CATEGORY = "image"
     OUTPUT_NODE = True
 
-    def image_to_image(self, prompt):
-        payload = json.dumps({"prompt": prompt})
+    def text_to_image(self, prompt, negative_prompt, guidance_scale, height, width, num_inference_steps, seed):
+        # Create the payload with all parameters
+        payload = {
+            "prompt": prompt
+        }
+        
+        # Only add optional parameters that are provided
+        if negative_prompt:
+            payload["negative_prompt"] = negative_prompt
+            
+        if guidance_scale != 3.5:
+            payload["guidance_scale"] = guidance_scale
+        
+        if height != 768:
+            payload["height"] = height
+        
+        if width != 1360:
+            payload["width"] = width
+        
+        if num_inference_steps != 3:
+            payload["num_inference_steps"] = num_inference_steps
+        
+        if seed != -1:
+            payload["seed"] = seed
+
 
         # Make the direct call
         response = runtime.invoke_endpoint(
-            EndpointName="flux-image-generator-endpoint",
+            EndpointName=ENDPOINT,
             ContentType="application/json",
-            Body=payload
+            Body=json.dumps(payload)
         )
 
         try:
