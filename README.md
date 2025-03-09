@@ -3,7 +3,7 @@
 A custom node for ComfyUI that enables image-to-image generation using Amazon Bedrock's Stable Diffusion service.
 In the provided example, the node takes the input image from the default ComfyUI workflow along with a text prompt, and a strength value, and returns an image.
 
-![ComfyUI Bedrock Node Example](comfy-custom.png)
+![ComfyUI Bedrock Node Example](imgs/comfy-custom.png)
 
 ## Features
 
