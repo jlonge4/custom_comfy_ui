@@ -7,7 +7,7 @@ import numpy as np
 import torch
 
 runtime = boto3.client('runtime.sagemaker')
-ENDPOINT = "YOUR_ENDPOINT_NAME"
+ENDPOINT = "flux-image-generator-endpoint"
 
 class Text2ImageNode:
     @classmethod
@@ -63,13 +63,20 @@ class Text2ImageNode:
             ContentType="application/json",
             Body=json.dumps(payload)
         )
-
+        print(response)
         try:
-            # Process response and convert to tensor
-            json_response = json.loads(response)
-    
+            response_body = response["Body"].read().decode("utf-8")
+            print("Response Body:", response_body)
+            
+            # Parse JSON from the response body
+            response_data = json.loads(response_body)
+            
+            # Check if 'image' is in the parsed response
+            if "image" not in response_data:
+                raise KeyError("'image' key not found in the response")
+            
             # Extract the base64-encoded image
-            base64_img = json_response["image"]
+            base64_img = response_data["image"]
             
             # Decode the base64 string
             img_bytes = base64.b64decode(base64_img)
