@@ -3,8 +3,10 @@
 This repository contains custom nodes for ComfyUI that integrate with AWS services for AI image generation:
 
 1. **Bedrock Node**: Image-to-image generation using Amazon Bedrock's Stable Diffusion service
+
 ![ComfyUI Bedrock Node Example](imgs/comfy-custom.png)
 2. **SageMaker Node**: Text-to-image generation using FP8 Flux Dev 1 diffusion pipeline
+
 ![ComfyUI SageMaker Node Example](imgs/sagemaker_node.png)
 
 Both nodes seamlessly integrate with your ComfyUI workflows, allowing you to leverage AWS's powerful AI infrastructure directly within the ComfyUI interface.
