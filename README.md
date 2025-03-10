@@ -57,13 +57,13 @@ Both nodes seamlessly integrate with your ComfyUI workflows, allowing you to lev
 
 1. Deploy the FP8 Flux Dev 1 model using the provided notebook
 2. Launch ComfyUI
-3. Find the SageMaker node in the node browser
+3. Find the SageMaker "Text@Image" node in the node browser
 4. Connect the node to your workflow with:
    - Text prompt
    - Optional parameters
 
 #### Model Deployment
-There was no full pipeline available that leveraged the flux1dev transformer in FP8, so a custom implementation is available here: [Jlonge4/flux-dev-fp8](https://huggingface.co/Jlonge4/flux-dev-fp8).
+There was no full pipeline available that leveraged the flux1dev transformer in FP8, so I created one and made it available here: [Jlonge4/flux-dev-fp8](https://huggingface.co/Jlonge4/flux-dev-fp8). This is important as using hugging face diffusers `from_single_file` download option will create symlinks, rendering your `model.tar.gz` unusable for deployment.
 
 To deploy the model:
 1. Run the `deploy_flux_dev-pipe.ipynb` notebook
